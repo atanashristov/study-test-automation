@@ -1,0 +1,23 @@
+    {
+      "version": "0.2.0",
+      "configurations": [
+        {
+          "name": "ProductAPI Debug",
+          "type": "dotnet",
+          "request": "launch",
+          "projectPath": "${workspaceFolder}/ProductAPI/ProductAPI.csproj"
+        },
+        {
+          "name": "EAWebApp Debug",
+          "type": "dotnet",
+          "request": "launch",
+          "projectPath": "${workspaceFolder}/EAWebApp/EAWebApp.csproj"
+        }
+      ],
+      "compounds": [
+        {
+          "name": "Compound",
+          "configurations": ["ProductAPI Debug", "EAWebApp Debug"]
+        }
+      ]
+    }
