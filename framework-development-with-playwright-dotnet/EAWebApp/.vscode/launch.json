@@ -11,7 +11,7 @@
           "name": "EAWebApp Debug",
           "type": "dotnet",
           "request": "launch",
-          "projectPath": "${workspaceFolder}/EAWebApp/EAWebApp.csproj"
+          "projectPath": "${workspaceFolder}/EAWebApp/EAWebApp.csproj",
         }
       ],
       "compounds": [

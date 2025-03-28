@@ -15,15 +15,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Remote": {
-      "commandName": "Project",
-      "dotnetRunMessages": "true",
-      "launchBrowser": true,
-      "applicationUrl": "http://+:8000"
-    },
     "LocalDev": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
       "applicationUrl": "http://localhost:8000",
       "environmentVariables": {

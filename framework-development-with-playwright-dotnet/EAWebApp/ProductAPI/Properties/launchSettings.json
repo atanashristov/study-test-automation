@@ -17,16 +17,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Remote": {
-      "commandName": "Project",
-      "dotnetRunMessages": "true",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "http://+:8001"
-    },
     "LocalDev": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:8001",
