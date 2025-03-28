@@ -4,10 +4,12 @@ Contains code and notes from studying [Automation Framework Development with Pla
 
 ## Understand the basics of Playwright
 
+### Create Playwright project
+
 We can create new "NUnit Playwright Test Project" from CLI. Check the available Playwright templates for NUnit:
 
 ```sh
-$ dotnet new list
+dotnet new list
 ...
 NUnit 3 Test Item                             nunit-test                  [C#],F#,VB  Test/NUnit
 NUnit 3 Test Project                          nunit                       [C#],F#,VB  Test/NUnit/Desktop/Web
@@ -19,7 +21,7 @@ In this course we just create "NUnit 3 Test Project": `dotnet new nunit -n Playw
 Add the following dependency packages:
 
 ```sh
-$ dotnet add package Microsoft.Playwright --version 1.51.0
+dotnet add package Microsoft.Playwright --version 1.51.0
 ```
 
 Create a test:
@@ -52,7 +54,7 @@ public class Tests
 If you try to run the test, it will explain that PLaywright was just installed and we have to:
 
 ```sh
-$ dotnet test --filter "Test1"
+dotnet test --filter "Test1"
 
       ╔════════════════════════════════════════════════════════════╗
       ║ Looks like Playwright was just installed or updated.       ║
@@ -64,7 +66,7 @@ $ dotnet test --filter "Test1"
 Run `pwsh bin/Debug/net9.0/playwright.ps1 install` as it suggested:
 
 ```sh
-$ pwsh bin/Debug/net9.0/playwright.ps1 install
+pwsh bin/Debug/net9.0/playwright.ps1 install
 
 Downloading Chromium 134.0.6998.35 (playwright build v1161) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1161/chromium-win64.zip
 141.8 MiB [====================] 100% 0.0s
@@ -89,7 +91,7 @@ Winldd playwright build v1007 downloaded to C:\Users\atanas.hristov\AppData\Loca
 Then repeat `dotnet test --filter "Test1"`:
 
 ```sh
-$ dotnet test --filter "Test1"
+dotnet test --filter "Test1"
 
 Restore complete (0.3s)
   PlaywrightDemo succeeded (0.3s) → bin\Debug\net9.0\PlaywrightDemo.dll
@@ -105,3 +107,54 @@ Build succeeded in 8.0s
 Workload updates are available. Run `dotnet workload list` for more information.
 
 ```
+
+### Different ways to Launch a browser
+
+By default Chromium runs headless. We can specify to open the Chromium window with `BrowserTypeLaunchOptions`:
+
+```csharp
+        var browserOption = new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        };
+        var chromium = await playwrightDriver.Chromium.LaunchAsync(browserOption);
+
+```
+
+Also, we can run the test with attached [dev tools](https://playwright.dev/dotnet/docs/debug):
+
+```sh
+$env:PWDEBUG=1 && dotnet test --filter "Test1"
+```
+
+We can make the instantiation more generic by using indexer on `IPlaywright`:
+
+```csharp
+var browser = await playwrightDriver["firefox"].LaunchAsync(browserOption);
+```
+
+If we want to open the installed Edge or Chrome, then we have to use channel:
+
+```csharp
+string? BrowserTypeLaunchOptions.Channel { get; set; }
+Browser distribution channel.
+
+Use "chromium" to opt in to new headless mode.
+
+Use "chrome", "chrome-beta", "chrome-dev", "chrome-canary", "msedge", "msedge-beta", "msedge-dev", or "msedge-canary" to use branded Google Chrome and Microsoft Edge.
+'Channel' is not null here.
+```
+
+and we have to use "chromium" as driver:
+
+```csharp
+        var browserOption = new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+            Channel = "msedge" // or "chrome", or "" for headless
+        };
+        var browser = await playwrightDriver["chromium"].LaunchAsync(browserOption);
+```
+
+More information on channels is on the [Playwright BrowserType documentation page](https://playwright.dev/dotnet/docs/api/class-browsertype).
+
