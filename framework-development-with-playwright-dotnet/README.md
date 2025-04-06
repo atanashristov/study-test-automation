@@ -153,8 +153,93 @@ and we have to use "chromium" as driver:
             Headless = false,
             Channel = "msedge" // or "chrome", or "" for headless
         };
-        var browser = await playwrightDriver["chromium"].LaunchAsync(browserOption);
+        var browser = await playwrightDriver["chromium"].LaunPchAsync(browserOption);
 ```
 
 More information on channels is on the [Playwright BrowserType documentation page](https://playwright.dev/dotnet/docs/api/class-browsertype).
+
+You can also run with [Playwright Inspector from Debugging Tools](https://playwright.dev/dotnet/docs/debug).
+To do so, set `PWDEBUG=1` before you run the tests:
+
+Bash: ```PWDEBUG=1 dotnet test```
+
+PWSH:
+
+```pwsh
+$env:PWDEBUG=1
+dotnet test
+```
+
+Here are the different ways to launch a browser:
+
+```csharp
+using Microsoft.Playwright;
+
+namespace PlaywrightDemo;
+
+public class Tests
+{
+    [SetUp]
+    public void Setup()
+    {
+    }
+
+    [Test]
+    public async Task TestWithHeadlessChromium()
+    {
+        var playwrightDriver = await Playwright.CreateAsync();
+        var chromium = await playwrightDriver.Chromium.LaunchAsync();
+        var browserContext = await chromium.NewContextAsync();
+        var page = await browserContext.NewPageAsync();
+
+        await page.GotoAsync("http://eaapp.somee.com");
+    }
+
+    [Test]
+    public async Task TestWithChromium()
+    {
+        var playwrightDriver = await Playwright.CreateAsync();
+        var browserOption = new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        };
+        var chromium = await playwrightDriver.Chromium.LaunchAsync(browserOption);
+        var browserContext = await chromium.NewContextAsync();
+        var page = await browserContext.NewPageAsync();
+
+        await page.GotoAsync("http://eaapp.somee.com");
+    }
+
+    [Test]
+    public async Task TestWithFirefox()
+    {
+        var playwrightDriver = await Playwright.CreateAsync();
+        var browserOption = new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        };
+        var browser = await playwrightDriver["firefox"].LaunchAsync(browserOption);
+        var browserContext = await browser.NewContextAsync();
+        var page = await browserContext.NewPageAsync();
+
+        await page.GotoAsync("http://eaapp.somee.com");
+    }
+
+    [Test]
+    public async Task TestWithChromeOrMsEdge()
+    {
+        var playwrightDriver = await Playwright.CreateAsync();
+        var browserOption = new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+            Channel = "msedge" // "chrome", "chrome-beta", "chrome-dev", "chrome-canary", "msedge", "msedge-beta", "msedge-dev", or "msedge-canary"
+        };
+        var browser = await playwrightDriver["chromium"].LaunchAsync(browserOption);
+        var browserContext = await browser.NewContextAsync();
+        var page = await browserContext.NewPageAsync();
+
+        await page.GotoAsync("http://eaapp.somee.com");
+    }
+}
+```
 
